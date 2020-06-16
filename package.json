@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -10,6 +10,9 @@
   "engines": {
     "node": ">=10"
   },
+  "keywords": [
+    "token, refreshToken, token on registeration, easy token"
+  ],
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",

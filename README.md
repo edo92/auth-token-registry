@@ -1,4 +1,4 @@
-# NPM install auth-token-registry
+# Npm install auth-token-registry
 
 ## Usage
 

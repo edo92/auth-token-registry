@@ -1,12 +1,20 @@
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 
-export const createTokens = async (user: object, secret: string, secret2: string) => {
+export const decode = async (refreshTokens: any, SECRET_2: any) => {
+  return await jwt.decode(refreshTokens, SECRET_2);
+}
+
+export const verify = async (refreshToken: any, SECRET_2: any) => {
+  await jwt.verify(refreshToken, SECRET_2);
+}
+
+export const createTokens = async (user: object, SECRET_1: string, SECRET_2: string) => {
   const createToken = jwt.sign(
     {
       user: _.pick(user, ['id', 'isAdmin']),
     },
-    secret,
+    SECRET_1,
     {
       expiresIn: '1m',
     },
@@ -16,7 +24,7 @@ export const createTokens = async (user: object, secret: string, secret2: string
     {
       user: _.pick(user, 'id'),
     },
-    secret2,
+    SECRET_2,
     {
       expiresIn: '7d',
     },
@@ -24,10 +32,11 @@ export const createTokens = async (user: object, secret: string, secret2: string
   return Promise.all([createToken, createRefreshToken]);
 };
 
-export const refreshTokens = async (refreshToken: string, findUser: any, SECRET_1: string, SECRET_2: string) => { //, SECRET: string, SECRET_2: string, findUser
-  let userId: string
+export const refreshTokens = async (refreshToken: string, findUser: any, SECRET_1: any, SECRET_2: any) => { //, SECRET: string, SECRET_2: string, findUser
+  let userId: string;
+
   try {
-    const refreshDecoded: any = jwt.decode(refreshToken);
+    const refreshDecoded: any = await decode(refreshToken, SECRET_2);
     const { id } = refreshDecoded.user;
     userId = id;
   }
@@ -47,7 +56,7 @@ export const refreshTokens = async (refreshToken: string, findUser: any, SECRET_
   const refreshSecret = SECRET_2
 
   try {
-    await jwt.verify(refreshToken, refreshSecret);
+    await verify(refreshToken, refreshSecret);
   }
   catch (err) {
     return {};
